@@ -16,7 +16,7 @@ fn main() {
 }
 
 
-fn volume_action(action: &str, _allArgs: AllArgs) {
+fn volume_action(action: &str, allargs: AllArgs) {
     println!("function call");
 
     let selector = "@DEFAULT_SINK@";
@@ -30,11 +30,16 @@ fn volume_action(action: &str, _allArgs: AllArgs) {
     let volume_int = getvolume_parse * 100.0;
     println!("volume: {}", volume_int);
 
-    let selectorname = match selector {
-        "@DEFAULT_SINK@" => "output",
-        "@DEFAULT_SOURCE" => "input",
+    let selector_name = match selector {
+        "@DEFAULT_SINK@" => "Output",
+        "@DEFAULT_SOURCE" => "Input",
         _ => "@DEFAULT_SINK"
     };
+
+    match allargs.notify {
+        None => println!("Notify"),
+        Some(_stuff) => println!("Notify"),
+    }
 
     match action {
         "mute" => {
@@ -48,19 +53,13 @@ fn volume_action(action: &str, _allArgs: AllArgs) {
             //TODO: Make this optional in the future
             Command::new("sh")
                 .arg("-c")
-                .arg(format!("notify-send --icon=audio-volume-high -u low -t 1000 -h int:value:{} -e -h string:synchronous:audio-volume 'Audio volume' 'Muted {}'", volume_int, selectorname))
+                .arg(format!("notify-send --icon=audio-volume-high -u low -t 1000 -e -h string:synchronous:audio-volume 'Audio volume' '{} Toggled'", selector_name))
                 .output()
                 .expect("notify-send failed to set notification");
         }
-        "setvolume" => {
-            Command::new("sh")
-                .arg("-c")
-                .arg(format!("notify-send --icon=audio-volume-high -u low -t 1000 -h int:value:{} -e -h string:synchronous:audio-volume 'Audio volume' 'Muted {}'", volume_int, selectorname))
-                .output()
-                .expect("notify-send failed to set notification");
-        }
+        "setvolume" => {}
         _ => eprint!("It must contain setvolume or mute")
-    }
+    };
 }
 
 
