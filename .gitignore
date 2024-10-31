@@ -5,6 +5,9 @@ target/
 .idea/
 /target
 
+# nix
+/result
+
 # pre-commit
 /.pre-commit-config.yaml
 
