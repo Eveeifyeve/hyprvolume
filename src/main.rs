@@ -1,25 +1,24 @@
 use clap::Parser;
-use interface::{CLI, SubCommands, AllArgs, Selector};
+use interface::{AllArgs, Selector, SubCommands, CLI};
 use std::process::Command;
-mod interface; 
-
-
+mod interface;
 
 fn main() {
     let cli = CLI::parse();
 
     match cli.command {
-        SubCommands::SetVolume {allargs, volume} => volume_action("setvolume", allargs, Some(volume)),
-        SubCommands::MuteVolume {allargs} => volume_action("mute", allargs, None),
+        SubCommands::SetVolume { allargs, volume } => {
+            volume_action("setvolume", allargs, Some(volume))
+        }
+        SubCommands::MuteVolume { allargs } => volume_action("mute", allargs, None),
         SubCommands::GenerateExampleConfig {} => {}
     }
 }
 
-
 fn volume_action(action: &str, allargs: AllArgs, volume: Option<String>) {
     let selector = match allargs.select {
         Selector::Output => "@DEFAULT_SINK@",
-        Selector::Input => "@DEFAULT_SOURCE@"
+        Selector::Input => "@DEFAULT_SOURCE@",
     };
 
     let selector_name = match allargs.select {
@@ -30,9 +29,18 @@ fn volume_action(action: &str, allargs: AllArgs, volume: Option<String>) {
     let wpctl_volume_cmd = wpctl_volume_bind
         .arg("-c")
         .arg(format!("wpctl get-volume {} | cut -f2 -d' '", selector));
-    let old_getvolume: f32 = String::from_utf8(wpctl_volume_cmd.output().expect("wpctl failed to get volume").stdout).unwrap().trim().to_string().parse().expect("Failed to parse as float");
+    let old_getvolume: f32 = String::from_utf8(
+        wpctl_volume_cmd
+            .output()
+            .expect("wpctl failed to get volume")
+            .stdout,
+    )
+    .unwrap()
+    .trim()
+    .to_string()
+    .parse()
+    .expect("Failed to parse as float");
     let old_volume_int = old_getvolume * 100.0;
-
 
     match action {
         "mute" => {
@@ -64,9 +72,18 @@ fn volume_action(action: &str, allargs: AllArgs, volume: Option<String>) {
                     .expect("wpctl failed to set mute");
             }
 
-            let getvolume: f32 = String::from_utf8(wpctl_volume_cmd.output().expect("wpctl failed to get volume").stdout).unwrap().trim().to_string().parse().expect("Failed to parse as float");
+            let getvolume: f32 = String::from_utf8(
+                wpctl_volume_cmd
+                    .output()
+                    .expect("wpctl failed to get volume")
+                    .stdout,
+            )
+            .unwrap()
+            .trim()
+            .to_string()
+            .parse()
+            .expect("Failed to parse as float");
             let volume_int = getvolume * 100.0;
-
 
             let notify_args = match allargs.notify {
                 Some(e) => e,
@@ -80,6 +97,6 @@ fn volume_action(action: &str, allargs: AllArgs, volume: Option<String>) {
                 .output()
                 .expect("notify-send failed to set notification");
         }
-        _ => eprint!("It must contain setvolume or mute")
+        _ => eprint!("It must contain setvolume or mute"),
     };
 }

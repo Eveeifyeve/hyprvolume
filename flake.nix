@@ -35,13 +35,14 @@
             ];
           };
 
+          formatter = pkgs.nixfmt-rfc-style;
+
           checks = {
             pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
               src = ./.;
               hooks = {
                 rustfmt.enable = true;
                 cargo-check.enable = true;
-                clippy.enable = true;
                 nixfmt-rfc-style.enable = true;
               };
             };
@@ -54,6 +55,7 @@
                 "rustc"
                 "cargo"
                 "clippy"
+                "rustfmt"
               ];
             in
             mkShell {
@@ -69,7 +71,7 @@
           # Feel free to make a nixpkg for it long as you maintain it. 
           packages.default = pkgs.rustPlatform.buildRustPackage rec {
             pname = "hyprvolume";
-            version = "1.0.0";
+            version = "0.1.0";
 
             src = pkgs.fetchFromGithub {
               owner = "eveeifyeve";

@@ -1,4 +1,4 @@
-use clap::{Parser, Subcommand, Args, ValueEnum};
+use clap::{Args, Parser, Subcommand, ValueEnum};
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
@@ -14,13 +14,13 @@ pub enum SubCommands {
         volume: String,
 
         #[clap(flatten)]
-        allargs: AllArgs
+        allargs: AllArgs,
     },
     MuteVolume {
         #[clap(flatten)]
-        allargs: AllArgs
-    }, 
-    GenerateExampleConfig {}, 
+        allargs: AllArgs,
+    },
+    GenerateExampleConfig {},
 }
 
 #[derive(Debug, Clone, ValueEnum)]
@@ -35,5 +35,5 @@ pub struct AllArgs {
     #[clap(long, short)]
     pub notify: Option<String>,
     #[clap(long, short, value_enum)]
-    pub select: Selector
+    pub select: Selector,
 }
