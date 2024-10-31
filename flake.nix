@@ -73,15 +73,15 @@
             pname = "hyprvolume";
             version = "0.1.0";
 
-            src = pkgs.fetchFromGithub {
+            src = pkgs.fetchFromGitHub {
               owner = "eveeifyeve";
               repo = "hyprvolume";
-              rev = "v${version}";
-              hash = lib.fakeHash;
+              rev = "main";
+              hash = "sha256-F1wBRyAXfoblgVybfHdlnd+1mPVD9hVgAF0St/hesU8=";
             };
+
             cargoHash = lib.fakeHash;
           };
-
         };
     };
 }
