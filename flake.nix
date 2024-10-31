@@ -80,7 +80,7 @@
               hash = "sha256-F1wBRyAXfoblgVybfHdlnd+1mPVD9hVgAF0St/hesU8=";
             };
 
-            cargoHash = lib.fakeHash;
+            cargoHash = "sha256-w0y67b6/vz9SooxagLb4JatqRT9/xqxZn10EKOVYNkQ=";
           };
         };
     };
