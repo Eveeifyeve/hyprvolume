@@ -6,6 +6,9 @@ Cargo.lock
 .idea/
 /target
 
+# pre-commit
+/.pre-commit-config.yaml
+
 # direnv
 .direnv
 .envrc
